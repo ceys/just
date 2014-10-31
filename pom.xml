@@ -10,6 +10,20 @@
 
     <repositories>
         <repository>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <id>central</id>
+            <name>libs-releases</name>
+            <url>http://artifactory.360buy-develop.com/libs-releases</url>
+        </repository>
+        <repository>
+            <snapshots />
+            <id>snapshots</id>
+            <name>libs-snapshots</name>
+            <url>http://artifactory.360buy-develop.com/libs-snapshots</url>
+        </repository>
+        <repository>
             <id>scala-tools.org</id>
             <name>Scala-tools Maven2 Repository</name>
             <url>http://scala-tools.org/repo-releases</url>
@@ -21,6 +35,20 @@
     </repositories>
 
     <pluginRepositories>
+        <pluginRepository>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <id>central</id>
+            <name>plugins-releases</name>
+            <url>http://artifactory.360buy-develop.com/plugins-releases</url>
+        </pluginRepository>
+        <pluginRepository>
+            <snapshots />
+            <id>snapshots</id>
+            <name>plugins-snapshots</name>
+            <url>http://artifactory.360buy-develop.com/plugins-snapshots</url>
+        </pluginRepository>
         <pluginRepository>
             <id>scala-tools.org</id>
             <name>Scala-tools Maven2 Repository</name>
@@ -56,12 +84,12 @@
         <dependency>
             <groupId>org.apache.spark</groupId>
             <artifactId>spark-streaming_2.10</artifactId>
-            <version>1.1.0</version>
+            <version>${spark.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.spark</groupId>
             <artifactId>spark-streaming-kafka_2.10</artifactId>
-            <version>1.1.0</version>
+            <version>${spark.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.hadoop</groupId>
@@ -73,6 +101,11 @@
             <groupId>com.sksamuel.kafka</groupId>
             <artifactId>kafka_2.10</artifactId>
             <version>0.8.0-beta1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.hbase</groupId>
+            <artifactId>hbase</artifactId>
+            <version>${hbase.version}</version>
         </dependency>
 
     </dependencies>
@@ -113,6 +146,7 @@
         <scala.binary.version>2.10</scala.binary.version>
         <scala.version>2.10.4</scala.version>
         <hadoop.version>2.2.0</hadoop.version>
+        <hbase.version>0.94.18</hbase.version>
         <spark.version>1.1.0</spark.version>
     </properties>
 
