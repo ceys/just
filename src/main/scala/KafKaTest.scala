@@ -1,10 +1,10 @@
+import org.apache.hadoop.hbase.client.{Get, HTableInterface, HTablePool}
+import org.apache.hadoop.hbase.util.Bytes
 import org.apache.spark.SparkConf
-import org.apache.spark.storage.StorageLevel
-import org.apache.spark.streaming.kafka.KafkaUtils
 import org.apache.spark.streaming.{Seconds, StreamingContext}
-import org.apache.spark.streaming.StreamingContext._ // 必须import，否则map无法使用
+import org.apache.spark.streaming.StreamingContext._
+import scala.util.Random
 import org.apache.spark.streaming.kafka._
-import kafka.serializer.DefaultDecoder
 import breeze.linalg.{Vector, DenseVector}
 
 
@@ -55,14 +55,13 @@ object KafkaTest {
 
     lines.map(generatePoint).foreachRDD( rdd => {
       rdd.foreachPartition(partitionOfRecords => {
-        HTableInterface userTable = htablePool.getTable("LR");
+        val table = htablePool.getTable("LR");
         val get: Get = new Get(Bytes.toBytes("ROWKEY")).addColumn(Bytes.toBytes("FAMILYNAME"), Bytes.toBytes("COLUMNAME"))
-        Bytes.toString(table.get(get).list.get(0).getValue)
+        val w = (table.get(get).list.get(0).getValue)
         partitionOfRecords.foreach(p => {
           val scale = (1 / (1 + math.exp(-p.y * (w.dot(p.x)))) - 1) * p.y
           w -= p.x * scale
         })
-
       })
     })
 
