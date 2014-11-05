@@ -22,15 +22,6 @@ object KafkaTest {
     DataPoint(x, y)
   }
 
-  def getHbase() {
-    HbaseUtils.getResultByColumn("LR", "ROW", "F", "C")
-  }
-
-  def updateHbase(w: DenseVector) {
-    HbaseUtils.updateTable("LR", "ROW", "F", "C")
-  }
-
-
   def main (args: Array[String]) {
     if (args.length < 4) {
       System.err.println("Usage: KafkaTest <zkQuorum> <group> <topics> <numThreads>")
@@ -49,7 +40,7 @@ object KafkaTest {
 
     var w = DenseVector.fill(D){2 * rand.nextDouble - 1}
 
-    val lines = KafkaUtils.createStream(ssc, zkQuorum, group, topicMap).map(_._2)
+    val lines = KafkaUtils.createStream(ssc, zkQuorum, group, topicMap).map(_._2.hashCode)
 
     val htablePool = new HTablePool();
 
@@ -57,7 +48,7 @@ object KafkaTest {
       rdd.foreachPartition(partitionOfRecords => {
         val table = htablePool.getTable("LR");
         val get: Get = new Get(Bytes.toBytes("ROWKEY")).addColumn(Bytes.toBytes("FAMILYNAME"), Bytes.toBytes("COLUMNAME"))
-        val w = (table.get(get).list.get(0).getValue)
+        //val w = (table.get(get).list.get(0).getValue)
         partitionOfRecords.foreach(p => {
           val scale = (1 / (1 + math.exp(-p.y * (w.dot(p.x)))) - 1) * p.y
           w -= p.x * scale
